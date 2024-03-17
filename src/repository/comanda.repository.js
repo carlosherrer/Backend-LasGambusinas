@@ -1,4 +1,5 @@
 const comandaModel = require("../database/models/comanda.model");
+const mesasModel = require("../database/models/mesas.model");
 
 const listarComanda = async () => {
   try {
@@ -13,6 +14,18 @@ const listarComanda = async () => {
       .populate({
         path: "platos",
       });
+
+    // Cambiar el estado de isActive de las mesas que no tienen comandas
+    const mesasSinComandas = await mesasModel.find({
+      _id: { $nin: data.map(comanda => comanda.mesas._id) }
+    });
+
+    await Promise.all(mesasSinComandas.map(async (mesa) => {
+      if (!mesa.isActive) {
+        mesa.isActive = true;
+        await mesa.save();
+      }
+    }));
 
     return data;
   } catch (error) {
