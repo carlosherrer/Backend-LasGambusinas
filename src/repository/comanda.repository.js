@@ -51,4 +51,18 @@ const eliminarComanda = async (comandaId) => {
   }
 };
 
-module.exports = { listarComanda, agregarComanda, eliminarComanda };
+const actualizarComanda = async (comandaId, newData) => {
+  try {
+    const updatedComanda = await comandaModel.findByIdAndUpdate(
+      comandaId,
+      newData,
+      { new: true }
+    );
+    return updatedComanda;
+  } catch (error) {
+    console.error("Error al actualizar la comanda", error);
+    throw error;
+  }
+};
+
+module.exports = { listarComanda, agregarComanda, eliminarComanda, actualizarComanda };

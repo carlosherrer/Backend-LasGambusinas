@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { listarComanda, agregarComanda, eliminarComanda } = require('../repository/comanda.repository');
+const { listarComanda, agregarComanda, eliminarComanda, actualizarComanda } = require('../repository/comanda.repository');
 
 router.get('/comanda', async (req, res) => {
     try {
@@ -39,5 +39,18 @@ router.delete('/comanda/:id', async (req, res) => {
         res.status(500).json({ message: 'Error al eliminar la comanda' });
     }
 });
+
+router.put("/comanda/:id", async (req, res) => {
+    const { id } = req.params;
+    const newData = req.body;
+    try {
+      const updatedComanda = await actualizarComanda(id, newData);
+      res.json(updatedComanda);
+      console.log("Comanda actualizada exitosamente");
+    } catch (error) {
+      console.error(error.message);
+      res.status(400).json({ message: error.message });
+    }
+  });
 
 module.exports = router;
