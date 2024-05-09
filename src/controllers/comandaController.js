@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFecha } = require('../repository/comanda.repository');
+const { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFechaIsActive, listarComandaPorFechaEntregado } = require('../repository/comanda.repository');
 
 router.get('/comanda', async (req, res) => {
     try {
@@ -17,13 +17,25 @@ router.get('/comanda', async (req, res) => {
 router.get('/comanda/fecha/:fecha', async (req, res) => {
     const { fecha } = req.params;
     try {
-        const data = await listarComandaPorFecha(fecha);
+        const data = await listarComandaPorFechaIsActive(fecha);
         res.json(data);
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ message: 'Error al obtener las comandas por fecha' });
     }
 });
+
+router.get('/comanda/fechastatus/:fecha', async (req, res) => {
+    const { fecha } = req.params;
+    try {
+        const data = await listarComandaPorFechaEntregado(fecha);
+        res.json(data);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Error al obtener las comandas por fecha' });
+    }
+});
+
 
 router.post('/comanda', async (req, res) => {
     try {

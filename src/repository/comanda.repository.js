@@ -92,6 +92,29 @@ const cambiarEstadoComanda = async (comandaId, nuevoEstado) => {
   }
 };
 
+const listarComandaPorFechaEntregado = async (fecha) => {
+  try {
+    const data = await comandaModel.find({ 
+      createdAt: fecha,
+      status: { $ne: "entregado" }
+    })
+    .populate({
+      path: "mozos",
+    })
+    .populate({
+      path: "mesas",
+    })
+    .populate({
+      path: "platos",
+    });
+    
+    return data;
+  } catch (error) {
+    console.error("error al listar la comanda por fecha", error);
+    throw error;
+  }
+};
+
 const listarComandaPorFecha = async (fecha) => {
   try {
     const data = await comandaModel.find({ 
@@ -115,4 +138,4 @@ const listarComandaPorFecha = async (fecha) => {
   }
 };
 
-module.exports = { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFecha};
+module.exports = { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFecha, listarComandaPorFechaEntregado};
