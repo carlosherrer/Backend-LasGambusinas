@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { listarComanda, agregarComanda, eliminarComanda, actualizarComanda } = require('../repository/comanda.repository');
+const { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFecha } = require('../repository/comanda.repository');
 
 router.get('/comanda', async (req, res) => {
     try {
@@ -11,6 +11,17 @@ router.get('/comanda', async (req, res) => {
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ message: 'Error al obtener las comandas' });
+    }
+});
+
+router.get('/comanda/fecha/:fecha', async (req, res) => {
+    const { fecha } = req.params;
+    try {
+        const data = await listarComandaPorFecha(fecha);
+        res.json(data);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: 'Error al obtener las comandas por fecha' });
     }
 });
 
@@ -52,5 +63,33 @@ router.put("/comanda/:id", async (req, res) => {
       res.status(400).json({ message: error.message });
     }
   });
+
+router.put('/comanda/:id/status', async (req, res) => {
+    const { id } = req.params;
+    const { nuevoStatus } = req.body;
+    
+    try {
+        const updatedComanda = await cambiarStatusComanda(id, nuevoStatus);
+        res.json(updatedComanda);
+        console.log("Estado de la comanda actualizado exitosamente");
+    } catch (error) {
+        console.error(error.message);
+        res.status(400).json({ message: error.message });
+    }
+});
+
+router.put('/comanda/:id/estado', async (req, res) => {
+    const { id } = req.params;
+    const { nuevoEstado } = req.body;
+
+    try {
+        const updatedComanda = await cambiarEstadoComanda(id, nuevoEstado);
+        res.json(updatedComanda);
+        console.log("Estado de la comanda actualizado exitosamente");
+    } catch (error) {
+        console.error(error.message);
+        res.status(400).json({ message: error.message });
+    }
+});
 
 module.exports = router;

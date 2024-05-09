@@ -6,6 +6,22 @@ const comandaSchema = new mongoose.Schema({
     platos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'platos' }],
     cantidades: [Number],
     observaciones: String,
+    status: { 
+        type: String,
+        default: 'preparación'
+    },
+    IsActive: {
+        type: Boolean,
+        default: true
+    },
+    createdAt: {
+        type: Date,
+        default: () => {
+            const currentDate = new Date();
+            const isoDate = currentDate.toISOString().split('T')[0];
+            return new Date(isoDate);
+        }
+    }
 });
 
 const comandaModel = mongoose.model('Comanda', comandaSchema);
