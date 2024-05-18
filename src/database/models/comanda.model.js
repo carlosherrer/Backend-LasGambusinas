@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment-timezone');
 
 const comandaSchema = new mongoose.Schema({
     mozos: { type: mongoose.Schema.Types.ObjectId, ref:'mozos' },
@@ -26,9 +27,8 @@ const comandaSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: () => {
-            const currentDate = new Date();
-            const isoDate = currentDate.toISOString().split('T')[0];
-            return new Date(isoDate);
+            const currentDate = moment.tz("America/Lima").format('YYYY-MM-DD');
+            return currentDate;
         }
     }
 },{ setDefaultsOnInsert: true });
