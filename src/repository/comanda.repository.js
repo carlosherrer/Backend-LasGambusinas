@@ -64,6 +64,23 @@ const actualizarComanda = async (comandaId, newData) => {
   }
 };
 
+const cambiarEstadoPlato = async (comandaId, platoId, nuevoEstado) => {
+  try {
+    const comanda = await comandaModel.findById(comandaId);
+    if (!comanda) throw new Error('Comanda no encontrada');
+
+    const plato = comanda.platos.find(p => p.plato.equals(platoId));
+    if (!plato) throw new Error('Plato no encontrado en la comanda');
+
+    plato.estado = nuevoEstado;
+    await comanda.save();
+    return comanda;
+  } catch (error) {
+    console.error("Error al cambiar el estado del plato en la comanda", error);
+    throw error;
+  }
+};
+
 const cambiarStatusComanda = async (comandaId, nuevoStatus) => {
   try {
       const updatedComanda = await comandaModel.findByIdAndUpdate(
@@ -105,7 +122,7 @@ const listarComandaPorFechaEntregado = async (fecha) => {
       path: "mesas",
     })
     .populate({
-      path: "platos",
+      path: "platos.plato",
     });
     
     return data;
@@ -128,7 +145,7 @@ const listarComandaPorFecha = async (fecha) => {
       path: "mesas",
     })
     .populate({
-      path: "platos",
+      path: "platos.plato",
     });
     
     return data;
@@ -138,4 +155,4 @@ const listarComandaPorFecha = async (fecha) => {
   }
 };
 
-module.exports = { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFecha, listarComandaPorFechaEntregado};
+module.exports = { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFecha, listarComandaPorFechaEntregado, cambiarEstadoPlato};

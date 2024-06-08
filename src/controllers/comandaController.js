@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFechaEntregado, listarComandaPorFecha } = require('../repository/comanda.repository');
+const { listarComanda, agregarComanda, eliminarComanda, actualizarComanda, cambiarStatusComanda, cambiarEstadoComanda, listarComandaPorFechaEntregado, listarComandaPorFecha, cambiarEstadoPlato } = require('../repository/comanda.repository');
 
 router.get('/comanda', async (req, res) => {
     try {
@@ -98,6 +98,20 @@ router.put('/comanda/:id/estado', async (req, res) => {
         const updatedComanda = await cambiarEstadoComanda(id, nuevoEstado);
         res.json(updatedComanda);
         console.log("Estado de la comanda actualizado exitosamente");
+    } catch (error) {
+        console.error(error.message);
+        res.status(400).json({ message: error.message });
+    }
+});
+
+router.put('/comanda/:id/plato/:platoId/estado', async (req, res) => {
+    const { id, platoId } = req.params;
+    const { nuevoEstado } = req.body;
+
+    try {
+        const updatedComanda = await cambiarEstadoPlato(id, platoId, nuevoEstado);
+        res.json(updatedComanda);
+        console.log('Estado del plato en la comanda actualizado exitosamente');
     } catch (error) {
         console.error(error.message);
         res.status(400).json({ message: error.message });
