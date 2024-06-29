@@ -22,7 +22,7 @@ const comandaSchema = new mongoose.Schema({
     observaciones: String,
     status: { 
         type: String,
-        default: 'preparación'
+        default: 'ingresante'
     },
     IsActive: {
         type: Boolean,
