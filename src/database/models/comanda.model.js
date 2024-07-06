@@ -40,16 +40,13 @@ comandaSchema.plugin(AutoIncrement, { inc_field: 'comandaNumber' });
 
 comandaSchema.pre('save', function (next) {
     if (this.isNew || this.isModified('platos')) {
-        // Si no hay cantidades o está vacío, llenar con 1s
         if (!this.cantidades || this.cantidades.length === 0) {
             this.cantidades = new Array(this.platos.length).fill(1);
         } else {
-            // Si la longitud de cantidades no coincide con la de platos, ajustar
             const diff = this.platos.length - this.cantidades.length;
             if (diff > 0) {
                 this.cantidades = this.cantidades.concat(new Array(diff).fill(1));
             }
-            // Reemplazar valores nulos con 1
             this.cantidades = this.cantidades.map(cantidad => cantidad == null ? 1 : cantidad);
         }
     }
