@@ -13,7 +13,7 @@ router.get("/mozos/:id", async (req, res) => {
   try {
     const codigomozo = req.params.id;
 
-    const mozo = await obtenerMozosPorId({ id: codigomozo });
+    const mozo = await obtenerMozosPorId(codigomozo);
 
     if (!mozo) {
       console.log("Estudiante no encontrado");

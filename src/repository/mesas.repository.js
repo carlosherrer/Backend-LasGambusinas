@@ -6,7 +6,7 @@ const listarMesas = async () => {
 }
 
 const obtenerMesaPorId = async (id) => {
-    const data = await mesas.findOne({ id: id });
+    const data = await mesas.findOne({ mesasId: id });
     return data;
 }
 
@@ -17,14 +17,14 @@ const crearMesa = async (data) => {
 }
 
 const actualizarMesa = async (_id, newData) => {
-    await mesas.findOneAndUpdate({ _id: _id }, newData);
+    await mesas.findOneAndUpdate({ mesasId: _id }, newData);
     const todaslasmesas = await listarMesas();
     return todaslasmesas;
 }
 
 
 const borrarMesa = async (id) => {
-    await mesas.findOneAndDelete({ id: id });
+    await mesas.findOneAndDelete({ mesasId: id });
     const todaslasmesas = await listarMesas();
     return todaslasmesas;
 }

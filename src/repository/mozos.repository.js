@@ -14,7 +14,7 @@ const crearMozo = async (data) => {
 }
 
 const obtenerMozosPorId = async (id) => {
-    const mozo = await mozos.findOne(id);
+    const mozo = await mozos.findOne({mozoId: id});
     return mozo;
 }
 
